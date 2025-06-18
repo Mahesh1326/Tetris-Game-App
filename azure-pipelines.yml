@@ -1,12 +1,16 @@
 trigger:
 - main
 
+resources:
+- repo: self
+
 variables:
-  dockerRegistryServiceConnection: '50403604-a3cd-4c99-8c15-a5df9424c91c'
-  imageRepository: 'maheshtetrisgameapp'
-  containerRegistry: 'tetris.azurecr.io'
+  dockerRegistryServiceConnection: '50403604-a3cd-4c99-8c15-a5df9424c91c'  # Already created in Azure DevOps
+  imageRepository: 'maheshtetrisgameapp'  # Just the name of the repo, no registry prefix
+  containerRegistry: 'testris.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
+  vmImageName: 'ubuntu-latest'
 
 stages:
 - stage: Build
@@ -15,14 +19,14 @@ stages:
   - job: Build
     displayName: Build
     pool:
-      name: my local
+      name: Default  # or 'my local' if you're using a self-hosted agent
     steps:
     - task: Docker@2
       displayName: Build and push an image to container registry
       inputs:
         command: buildAndPush
+        containerRegistry: $(dockerRegistryServiceConnection)
         repository: $(imageRepository)
         dockerfile: $(dockerfilePath)
-        containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)

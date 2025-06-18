@@ -5,11 +5,11 @@ resources:
 - repo: self
 
 variables:
-  dockerRegistryServiceConnection: '50403604-a3cd-4c99-8c15-a5df9424c91c'  # ACR service connection
-  imageRepository: 'maheshtetrisgameapp'  # ACR repo name (no registry prefix)
+  dockerRegistryServiceConnection: '50403604-a3cd-4c99-8c15-a5df9424c91c'
+  imageRepository: 'maheshtetrisgameapp'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
-  agentPoolName: 'Default'  # 👈 your local self-hosted agent pool
+  agentPoolName: 'Default'
 
 stages:
 - stage: Build
@@ -20,11 +20,6 @@ stages:
     pool:
       name: $(agentPoolName)
     steps:
-    - task: DockerInstaller@0
-      displayName: Install Docker (optional, skip if already installed)
-      inputs:
-        dockerVersion: 'latest'
-
     - task: Docker@2
       displayName: Build and Push Docker Image
       inputs:

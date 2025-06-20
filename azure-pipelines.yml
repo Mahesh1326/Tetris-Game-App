@@ -3,13 +3,13 @@ trigger:
 
 variables:
   dockerRegistryServiceConnection: '50403604-a3cd-4c99-8c15-a5df9424c91c'  # Your service connection ID
-  imageRepository: 'maheshtetrisgameapp'  # Your image name in ACR
+  imageRepository: 'maheshtetrisgameapp'
   containerRegistry: 'testris.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
 
 pool:
-  name: Default  # Must match your self-hosted agent pool name
+  vmImage: 'ubuntu-latest'  # Microsoft-hosted agent
 
 steps:
 - task: Docker@2

@@ -1,32 +1,23 @@
 trigger:
 - main
 
-resources:
-- repo: self
-
 variables:
-  dockerRegistryServiceConnection: '50403604-a3cd-4c99-8c15-a5df9424c91c'
-  imageRepository: 'maheshtetrisgameapp'
+  dockerRegistryServiceConnection: '50403604-a3cd-4c99-8c15-a5df9424c91c'  # Your service connection ID
+  imageRepository: 'maheshtetrisgameapp'  # Your image name in ACR
+  containerRegistry: 'testris.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
-  agentPoolName: 'Default'
 
-stages:
-- stage: Build
-  displayName: Build and Push Stage
-  jobs:
-  - job: BuildAndPush
-    displayName: Build and Push Docker Image
-    pool:
-      name: $(agentPoolName)
-    steps:
-    - task: Docker@2
-      displayName: Build and Push Docker Image
-      inputs:
-        command: buildAndPush
-        containerRegistry: $(dockerRegistryServiceConnection)
-        repository: $(imageRepository)
-        dockerfile: $(dockerfilePath)
-        tags: |
-          $(tag)
-          latest
+pool:
+  name: Default  # Must match your self-hosted agent pool name
+
+steps:
+- task: Docker@2
+  displayName: Build and push Docker image
+  inputs:
+    containerRegistry: $(dockerRegistryServiceConnection)
+    repository: $(imageRepository)
+    command: buildAndPush
+    Dockerfile: $(dockerfilePath)
+    tags: |
+      $(tag)
